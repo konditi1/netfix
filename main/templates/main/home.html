@@ -8,5 +8,21 @@
         <p class="site_title">NetFix</p>
         <img class="home_logo" src="static/css/logo.png" alt="logo">
         <p><strong>Most Requested Services</strong></p>
+        <div class="services_list">
+            {% for service in services %}
+                <div style="display: ruby;">
+                    <div class='service_list_info'>
+                        <li><a href="/services/{{ service.id }}">{{ service.name }}</a> -- {{ service.price_hour }}€/hour</li>
+                        <pre>{{ service.description }}</pre>
+                    </div>
+                    <p style="display:block; margin: 0; float: right;font-size: small; margin-right: 30px;">
+                        by <a href="/company/{{ service.company.user }}">{{ service.company.user }}</a>
+                    </p>
+                </div>
+                {% if not forloop.last %}
+                    <div class="line"></div>
+                {% endif %}
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}

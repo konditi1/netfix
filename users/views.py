@@ -2,6 +2,8 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.views.generic import CreateView, TemplateView
+from django.contrib.auth.decorators import login_required
+from services.models import Service, ServiceRequest 
 
 from .forms import CustomerSignUpForm, CompanySignUpForm, UserLoginForm
 from .models import User, Company, Customer
@@ -24,7 +26,7 @@ class CustomerSignUpView(CreateView):
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        return redirect('/profile')
+        return redirect('/')
 
 
 class CompanySignUpView(CreateView):
@@ -59,25 +61,25 @@ def LoginUserView(request):
 
     return render(request, 'users/login.html', {'form': form})
 
-
+@login_required
 def user_profile(request):
-    if not request.user.is_authenticated:
-        return redirect('login_user')
-    
-    context = {
-        'user': request.user,
-    }
-    
-    if request.user.is_customer:
-        # # Fetch customer-specific data
-        # requested_services = request.user.customer.requested_services.all()  # Example queryset
-        # context['services'] = requested_services
-        context['is_customer'] = True
-    elif request.user.is_company:
-        # Fetch company-specific data
-        # created_services = request.user.company.services.all()  # Example queryset
-        # context['services'] = created_services
-        context['is_company'] = True
+    user = request.user
+    if hasattr(user, 'customer'):
+        is_customer = True
+        is_company = False
+        services = ServiceRequest.objects.filter(customer=user.customer)
+    elif hasattr(user, 'company'):
+        is_customer = False
+        is_company = True
+        services = Service.objects.filter(company=user.company)
+    else:
+        is_customer = is_company = False
+        services = None
 
-    return render(request, 'users/profile.html', context)
+    return render(request, 'users/profile.html', {
+        'user': user,
+        'is_customer': is_customer,
+        'is_company': is_company,
+        'services': services
+    })
 

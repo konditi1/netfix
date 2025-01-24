@@ -7,6 +7,10 @@
     <form method="POST">
         {% csrf_token %}
         {{form}}
+        <div style="padding-right: 210px;">
+          <p>Enter date of birth</p>
+      </div>
+      
         <button type="submit" name="register">Register</button>
     </form>
 {% endblock %}

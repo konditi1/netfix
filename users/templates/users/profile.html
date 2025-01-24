@@ -6,24 +6,30 @@
 
 {% block content %}
     <div>
-        <h1>Welcome, {{ user.username }}</h1>
+        <h1>{{ user.username }}</h1>
         <p>Email: {{ user.email }}</p>
         {% if is_customer %}
             <p>Role: Customer</p>
             <h2>Your Requested Services</h2>
             <ul>
-                {% for service in services %}
-                    <li>{{ service.name }} - {{ service.price }}</li>
+                {% for service_request in services %}
+                    <li>{{ service_request.service.name }} - {{ service_request.service.price_hour }} >> {{ service_request.date_requested }}</li>
                 {% empty %}
                     <li>No services requested yet.</li>
                 {% endfor %}
             </ul>
         {% elif is_company %}
             <p>Role: Company ({{ user.company.field }})</p>
-            <h2>Your Created Services</h2>
+            <h2>Available Services</h2>
             <ul>
                 {% for service in services %}
-                    <li>{{ service.name }} - {{ service.price_hour }}€/hour</li>
+                <div style="display: ruby;">
+                    <div class='service_list_info'>
+                        <li><a href="/services/{{ service.id }}">{{ service.name }}</a> -- {{ service.price_hour }}€/hour</li>
+                        <pre>{{ service.description }}</pre>
+                    </div>
+                    </p>
+                </div>
                 {% empty %}
                     <li>No services created yet.</li>
                 {% endfor %}

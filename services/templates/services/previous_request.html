@@ -1,0 +1,27 @@
+{% extends "main/base.html" %}
+
+{% block title %}
+    Previously Requested Services
+{% endblock %}
+
+{% block content %}
+    <div>
+        <h1>Previous Requested Services</h1>
+        <p>Customer Name: {{ customer.user.username }}</p>
+        <p>Email: {{ customer.user.email }}</p>
+
+        {% if previous_requests %}
+            <ul>
+                {% for service_request in  previous_requests %}  
+                <li>
+                    {{ service_request.service.name }} - {{ service_request.total_cost }}€({{ service_request.service.price_hour }} * {{ service_request.hours_required }}) >> {{ service_request.date_requested }}
+                </li>                                  
+                {% empty %}
+                    <li>No services requested yet.</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No previous service requests found.</p>
+        {% endif %}
+    </div>
+{% endblock %}
