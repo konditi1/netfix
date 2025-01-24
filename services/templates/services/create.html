@@ -1,0 +1,81 @@
+{% extends 'main/base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}
+Create Service - ALX Travel App
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Create a New Service</h2>
+    <div class="card p-4 shadow-sm">
+        <!-- Form Section -->
+        <form method="post" action="{% url 'services_create' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <!-- Service Name -->
+            <div class="form-group">
+                <label for="name">Service Name:</label>
+                {{ form.name|add_class:"form-control" }}
+            </div>
+
+            <!-- Description -->
+            <div class="form-group">
+                <label for="description">Service Description:</label>
+                {{ form.description|add_class:"form-control" }}
+            </div>
+
+            <!-- Service Field -->
+            <div class="form-group">
+                <label for="field">Service Field:</label>
+                {{ form.field|add_class:"form-control" }}
+                <small class="form-text text-muted">
+                    Fields must match the company's area of expertise.
+                </small>
+            </div>
+
+            <!-- Price Per Hour -->
+            <div class="form-group">
+                <label for="price_hour">Price Per Hour:</label>
+                {{ form.price_hour|add_class:"form-control" }}
+                <small class="form-text text-muted">Set a fair price for your service.</small>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-group text-center mt-4">
+                <button type="submit" class="btn btn-primary">Create Service</button>
+            </div>
+        </form>
+
+        <!-- Success Messages -->
+        {% if messages %}
+        <div class="alert alert-success mt-3">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Error Messages -->
+        {% if form.errors %}
+        <div class="alert alert-danger mt-3">
+            <strong>Oops! Something went wrong:</strong>
+            <ul>
+                {% for field, errors in form.errors.items %}
+                    <li><strong>{{ field|capfirst }}</strong>: {{ errors|join:", " }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Mobile Responsiveness Tips -->
+<style>
+    @media (max-width: 768px) {
+        .form-group label {
+            font-size: 14px;
+        }
+    }
+</style>
+{% endblock %}

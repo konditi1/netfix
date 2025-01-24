@@ -1,0 +1,45 @@
+{% extends "main/base.html" %}
+
+{% block title %}
+    Login
+{% endblock title %}
+
+{% block content %}
+
+<form method="post">
+    {% csrf_token %}
+
+    {{ form.email }}
+    {% if form.email.errors %}
+        {% for error in form.email.errors %}
+            <span id="error-messages" style="color:red;">{{ error }}</span>
+        {% endfor %}
+    {% endif %}
+
+    {{ form.password }}
+    {% if form.password.errors %}
+        {% for error in form.password.errors %}
+            <span id="error-messages" style="color:red;">{{ error }}</span>
+        {% endfor %}
+    {% endif %}
+
+    {% if messages %}
+        {% for message in messages %}
+            <div id="error-messages" style="color:red;">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <button type="submit">Login</button>
+</form>
+
+
+    <script>
+        setTimeout(() => {
+            const errorMessages = document.getElementById('error-messages');
+            if (errorMessages) {
+                errorMessages.style.display = 'none';
+            }
+        }, 5000);
+    </script>
+
+{% endblock content %}
