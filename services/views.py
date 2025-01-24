@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-
+from django.contrib import messages
 from users.models import Company, Customer, User
 
 from .models import Service
@@ -16,9 +17,32 @@ def index(request, id):
     service = Service.objects.get(id=id)
     return render(request, 'services/single_service.html', {'service': service})
 
-
+@login_required
 def create(request):
-    return render(request, 'services/create.html', {'form': CreateNewService()})
+    # Get the company linked to the logged-in user
+    company = request.user.company
+    field_choices = [(company.field, company.field)]
+
+    if request.method == "POST":
+        form = CreateNewService(request.POST, choices=field_choices)
+        if form.is_valid():
+            # Save the new service
+            Service.objects.create(
+                name=form.cleaned_data['name'],
+                description=form.cleaned_data['description'],
+                field=form.cleaned_data['field'],
+                price_hour=form.cleaned_data['price_hour'],
+                company=company,
+            )
+            messages.success(request, "Service created successfully!")
+            print('message',messages)
+            return redirect('/')  
+        else:
+            print('error messages',form.errors)
+    else:
+        form = CreateNewService(choices=field_choices)
+
+    return render(request, 'services/create.html', {'form': form})
 
 
 def service_field(request, field):
