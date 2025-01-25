@@ -48,18 +48,17 @@ pip install -r requirements.txt
 
 * Apply migrations:
 
-``bash
-python manage.py makemigrations  
-python manage.py migrate 
-``` 
+```bash
+python3 manage.py makemigrations  
+python3 manage.py migrate 
+```
 
 * Run the server:
 
 ```bash
-python manage.py runserver  
+python3 manage.py runserver  
 ```
 
-## Contributors
-
-* Benard Opiyo
-* Fena Onditi
+## Contributors  
+- [Benard Opiyo](https://learn.zone01kisumu.ke/beopiyo)  
+- [Fena Onditi](https://learn.zone01kisumu.ke/fonditi)  
